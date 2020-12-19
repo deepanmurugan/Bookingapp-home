@@ -19,7 +19,7 @@ def get_hit_count():
             time.sleep(0.5)
 
 
-@app.route('/')
+@app.route('/home')
 def hit():
     count = get_hit_count()
     return "Welcome to BookingApp - Home Page - on node %s. This page has been hit %i times since deployment" % ( socket.gethostname(), int(count))
