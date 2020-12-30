@@ -25,7 +25,7 @@ def get_hit_count():
 def hit():
     count = get_hit_count()
     response = requests.get("http://movie.internal-bookingapp.com:5000/movie")
-    return "Welcome to BookingApp - Home Page - on node %s. \nHit count = %i \n\n Response from movie.internal-bookingapp.com service: %s" % ( socket.gethostname(), int(count), response.content)
+    return "<html>Welcome to BookingApp - Home Page - on node %s.<br \>Hit count = %i.<br \>Response from movie.internal-bookingapp.com service: %s" % ( socket.gethostname(), int(count), response.content)
 
 
 if __name__ == "__main__":
