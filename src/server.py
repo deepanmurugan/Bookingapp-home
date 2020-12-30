@@ -1,10 +1,11 @@
 import time
 import redis
 import socket
+import requests
 from flask import Flask
 
 app = Flask(__name__)
-cache = redis.Redis(host='redis.bookingapp-internal.com', port=6379)
+cache = redis.Redis(host='redis.internal-bookingapp.com', port=6379)
 
 
 def get_hit_count():
@@ -13,6 +14,7 @@ def get_hit_count():
         try:
             return cache.incr('hits')
         except redis.exceptions.ConnectionError as exc:
+            print("Exception occured while connecting redis")
             if retries == 0:
                 raise exc
             retries -= 1
@@ -22,7 +24,8 @@ def get_hit_count():
 @app.route('/home')
 def hit():
     count = get_hit_count()
-    return "Welcome to BookingApp - Home Page - on node %s. This page has been hit %i times since deployment" % ( socket.gethostname(), int(count))
+    response = requests.get("http://movie.internal-bookingapp.com:5000/movie")
+    return "Welcome to BookingApp - Home Page - on node %s. \nHit count = %i \n\n Response from movie.internal-bookingapp.com service: %s" % ( socket.gethostname(), int(count), response.content)
 
 
 if __name__ == "__main__":
